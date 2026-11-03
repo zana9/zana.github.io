@@ -61,3 +61,39 @@
 
             const embedUrl = getYouTubeEmbedUrl(videoInput);
             if (!embedUrl) {
+                alert('لینکی یوتیوب هەڵەیە، تکایە لینکی ڕاست دابنە!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageSrc = imageInput ? e.target.result : 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500';
+                
+                const container = document.getElementById('gamesContainer');
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerHTML = `
+                    <img src="${imageSrc}" alt="${name}">
+                    <h3>${name}</h3>
+                    <p>پلاتفۆرم: ${platform}</p>
+                    <iframe src="${embedUrl}" allowfullscreen></iframe>
+                    <br>
+                    <a href="https://wa.me/?text=سڵاو، دەمەوێت یاری ${encodeURIComponent(name)} داوا بکەم" class="whatsapp-btn" target="_blank">داواکردن لە ڕێگەی واتسئاپ</a>
+                `;
+                container.prepend(card);
+
+                // پاککردنەوەی خانەکان
+                document.getElementById('gameName').value = '';
+                document.getElementById('gameVideo').value = '';
+                document.getElementById('gameImage').value = '';
+            };
+
+            if (imageInput) {
+                reader.readAsDataURL(imageInput);
+            } else {
+                reader.onload({ target: { result: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500' } });
+            }
+        }
+    </script>
+</body>
+</html>
