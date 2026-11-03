@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کەتەلۆگی یارییەکانی PS4 و PS5</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #121212; color: #fff; margin: 0; padding: 20px; }
+        h1, h2 { text-align: center; color: #0070d1; }
+        .admin-panel { background: #1e1e1e; padding: 20px; border-radius: 10px; max-width: 500px; margin: 20px auto; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+        .admin-panel input, .admin-panel select { width: 100%; padding: 10px; margin: 8px 0; background: #2c2c2c; border: 1px solid #444; color: #fff; border-radius: 5px; }
+        .admin-panel button { background: #0070d1; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .admin-panel button:hover { background: #005bb5; }
+        
+        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px; }
+        .game-card { background: #1e1e1e; border-radius: 10px; width: 300px; padding: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+        .game-card img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; }
+        .game-title { font-size: 18px; font-weight: bold; margin: 10px 0 5px; }
+        .game-platform { font-size: 14px; color: #aaa; margin-bottom: 10px; }
+        .trailer-box { margin-bottom: 10px; }
+        .trailer-box iframe { width: 100%; height: 160px; border-radius: 6px; border: none; }
+        .whatsapp-btn { display: block; background: #25d366; color: white; text-align: center; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>🎮 کەتەلۆگی یارییەکانی PS4 و PS5</h1>
+
+    <!-- بەشی بەڕێوەبردن بۆ زیادکردنی یاری -->
+    <div class="admin-panel">
+        <h2>➕ زیادکردنی یاری نوێ</h2>
+        <input type="text" id="gameName" placeholder="ناوی یاری بنووسە (بۆ نموونە: God of War)">
+        <select id="gamePlatform">
+            <option value="PS5">پلاتفۆرم: PS5</option>
+            <option value="PS4">پلاتفۆرم: PS4</option>
+            <option value="PS4 / PS5">پلاتفۆرم: PS4 / PS5</option>
+        </select>
+        <label>وێنەی بەرگی یاری (Upload):</label>
+        <input type="file" id="gameImage" accept="image/*">
+        <button onclick="addGame()">زیادکردنی یاری بۆ سایت</button>
+    </div>
+
+    <!-- شوێنی نیشاندانی یارییەکان -->
+    <div class="container" id="gamesContainer"></div>
+
+    <script>
+        function addGame() {
+            const name = document.getElementById('gameName').value;
+            const platform = document.getElementById('gamePlatform').value;
+            const imageInput = document.getElementById('gameImage');
+
+            if (!name || imageInput.files.length === 0) {
+                alert('تکایە ناوی یاری و وێنەکەی هەڵبژێرە!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageSrc = e.target.result;
+
+                // دروستکردنی لینکی گەڕانی یوتیوب بەپێی ناوی یارییەکە بۆ تریلەر بە شێوەی ئۆتۆماتیکی
+                const youtubeEmbedQuery = encodeURIComponent(name + " official trailer");
+                const trailerUrl = `https://www.youtube.com/embed?listType=search&list=${youtubeEmbedQuery}`;
+
+                const container = document.getElementById('gamesContainer');
+                
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerHTML = `
+                    <img src="${imageSrc}" alt="${name}">
+                    <div class="game-title">${name}</div>
+                    <div class="game-platform">پلاتفۆرم: ${platform}</div>
+                    <div class="trailer-box">
+                        <iframe src="${trailerUrl}" allowfullscreen></iframe>
+                    </div>
+                    <a href="https://wa.me/9647504400419?text=سڵاو، دەمەوێت ئەم یارییە داوا بکەم: ${name}" class="whatsapp-btn" target="_blank">داواکردن لە ڕێگەی واتسئاپ</a>
+                `;
+                
+                container.appendChild(card);
+
+                // پاککردنەوەی خانەکان دوای زیادکردن
+                document.getElementById('gameName').value = '';
+                document.getElementById('gameImage').value = '';
+            }
+            reader.readAsDataURL(imageInput.files[0]);
+        }
+    </script>
+
+</body>
+</html>
