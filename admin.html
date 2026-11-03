@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بەڕێوەبەری کەتەلۆگ - Admin</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #121212; color: #fff; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .admin-panel { background: #1e1e1e; padding: 30px; border-radius: 10px; width: 100%; max-width: 500px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        h2 { text-align: center; color: #00d2ff; margin-bottom: 20px; }
+        input, select, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #2a2a2a; color: #fff; box-sizing: border-box; }
+        button { background: #007bff; color: white; font-weight: bold; cursor: pointer; border: none; }
+        button:hover { background: #0056b3; }
+        .view-site { display: block; text-align: center; margin-top: 15px; color: #25d366; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-panel">
+        <h2>زیادکردنی یاری بۆ کەتەلۆگ</h2>
+        <input type="text" id="gameName" placeholder="ناوی یاری (بۆ نموونە: God of War)">
+        <select id="gamePlatform">
+            <option value="PS4">پلاتفۆرم: PS4</option>
+            <option value="PS5">پلاتفۆرم: PS5</option>
+        </select>
+        <input type="text" id="gameVideo" placeholder="لینکی تریلەری یوتیوب (YouTube Link)">
+        <input type="file" id="gameImage" accept="image/*">
+        <button onclick="saveGame()">زیادکردنی یاری و ناردن بۆ کەتەلۆگ</button>
+        <a href="index.html" class="view-site" target="_blank">بینینی کەتەلۆگی یارییەکان →</a>
+    </div>
+
+    <script>
+        function getYouTubeEmbedUrl(url) {
+            let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            let match = url.match(regExp);
+            return (match && match[2].length === 11) ? 'https://www.youtube.com/embed/' + match[2] : null;
+        }
+
+        function saveGame() {
+            const name = document.getElementById('gameName').value;
+            const platform = document.getElementById('gamePlatform').value;
+            const videoInput = document.getElementById('gameVideo').value;
+            const imageInput = document.getElementById('gameImage').files[0];
+
+            if (!name || !videoInput) {
+                alert('تکایە ناو و لینکی یوتیوب پڕ بکەرەوە!');
+                return;
+            }
+
+            const embedUrl = getYouTubeEmbedUrl(videoInput);
+            if (!embedUrl) {
+                alert('لینکی یوتیوب هەڵەیە!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageSrc = imageInput ? e.target.result : 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500';
+                
+                // دروستکردنی زانیاری یارییەکە
+                const newGame = {
+                    name: name,
+                    platform: platform,
+                    video: embedUrl,
+                    image: imageSrc
+                };
+
+                // وەرگرتنی یارییەکانی پێشوو لە بیرگە
+                let games = JSON.parse(localStorage.getItem('myGames')) || [];
+                games.unshift(newGame); // خستنە سەرەتای لیستەکە
+                localStorage.setItem('myGames', JSON.stringify(games));
+
+                alert('یارییەکە بە سەرکەوتوویی زیاد کرا بۆ کەتەلۆگ!');
+                
+                // پاککردنەوەی خانەکان
+                document.getElementById('gameName').value = '';
+                document.getElementById('gameVideo').value = '';
+                document.getElementById('gameImage').value = '';
+            };
+
+            if (imageInput) {
+                reader.readAsDataURL(imageInput);
+            } else {
+                reader.onload({ target: { result: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500' } });
+            }
+        }
+    </script>
+</body>
+</html>
