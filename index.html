@@ -6,85 +6,104 @@
     <title>کەتەلۆگی یارییەکانی PS4 و PS5</title>
     <style>
         body { font-family: Tahoma, sans-serif; background-color: #121212; color: #fff; margin: 0; padding: 20px; }
-        h1, h2 { text-align: center; color: #0070d1; }
-        .admin-panel { background: #1e1e1e; padding: 20px; border-radius: 10px; max-width: 500px; margin: 20px auto; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
-        .admin-panel input, .admin-panel select { width: 100%; padding: 10px; margin: 8px 0; background: #2c2c2c; border: 1px solid #444; color: #fff; border-radius: 5px; }
-        .admin-panel button { background: #0070d1; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        .admin-panel button:hover { background: #005bb5; }
-        
-        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px; }
-        .game-card { background: #1e1e1e; border-radius: 10px; width: 300px; padding: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
-        .game-card img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; }
-        .game-title { font-size: 18px; font-weight: bold; margin: 10px 0 5px; }
-        .game-platform { font-size: 14px; color: #aaa; margin-bottom: 10px; }
-        .trailer-box { margin-bottom: 10px; }
-        .trailer-box iframe { width: 100%; height: 160px; border-radius: 6px; border: none; }
-        .whatsapp-btn { display: block; background: #25d366; color: white; text-align: center; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-top: 10px; }
+        h1, h2 { text-align: center; color: #00d2ff; }
+        .admin-panel { background: #1e1e1e; padding: 20px; border-radius: 10px; max-width: 600px; margin: 0 auto 30px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .admin-panel input, .admin-panel select, .admin-panel button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #2a2a2a; color: #fff; box-sizing: border-box; }
+        .admin-panel button { background: #007bff; color: white; font-weight: bold; cursor: pointer; border: none; }
+        .admin-panel button:hover { background: #0056b3; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .game-card { background: #1e1e1e; border-radius: 10px; width: 300px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.5); text-align: center; padding-bottom: 15px; }
+        .game-card img { width: 100%; height: 200px; object-fit: cover; }
+        .game-card h3 { margin: 10px 0; color: #fff; }
+        .game-card p { color: #aaa; font-size: 14px; }
+        .game-card iframe { width: 100%; height: 170px; border: none; margin-top: 10px; }
+        .whatsapp-btn { display: inline-block; background: #25d366; color: white; padding: 10px 20px; margin-top: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+        .whatsapp-btn:hover { background: #1ebe5d; }
     </style>
 </head>
 <body>
 
-    <h1>🎮 کەتەلۆگی یارییەکانی PS4 و PS5</h1>
+    <h1>کەتەلۆگی یارییەکانی ڤیدیۆیی</h1>
 
-    <!-- بەشی بەڕێوەبردن بۆ زیادکردنی یاری -->
+    <!-- بەشی زیادکردنی یاری -->
     <div class="admin-panel">
-        <h2>➕ زیادکردنی یاری نوێ</h2>
+        <h2>زیادکردنی یاری نوێ</h2>
         <input type="text" id="gameName" placeholder="ناوی یاری بنووسە (بۆ نموونە: God of War)">
         <select id="gamePlatform">
-            <option value="PS5">پلاتفۆرم: PS5</option>
             <option value="PS4">پلاتفۆرم: PS4</option>
-            <option value="PS4 / PS5">پلاتفۆرم: PS4 / PS5</option>
+            <option value="PS5">پلاتفۆرم: PS5</option>
         </select>
-        <label>وێنەی بەرگی یاری (Upload):</label>
+        <input type="text" id="gameVideo" placeholder="لینکی تریلەری یوتیوب (YouTube Link)">
         <input type="file" id="gameImage" accept="image/*">
         <button onclick="addGame()">زیادکردنی یاری بۆ سایت</button>
     </div>
 
-    <!-- شوێنی نیشاندانی یارییەکان -->
-    <div class="container" id="gamesContainer"></div>
+    <!-- پێڕستی یارییەکان -->
+    <div class="container" id="gamesContainer">
+        <!-- نموونەی یارییەک کە پێشتر تاقیت کردبووەوە -->
+        <div class="game-card">
+            <img src="https://images.unsplash.com/photo-1612287233002-b1d2836ef055?w=500" alt="Deadpool">
+            <h3>Deadpool</h3>
+            <p>پلاتفۆرم: PS4</p>
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+            <br>
+            <a href="https://wa.me/?text=سڵاو، دەمەوێت یاری Deadpool داوا بکەم" class="whatsapp-btn" target="_blank">داواکردن لە ڕێگەی واتسئاپ</a>
+        </div>
+    </div>
 
     <script>
+        function getYouTubeEmbedUrl(url) {
+            let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            let match = url.match(regExp);
+            return (match && match[2].length === 11) ? 'https://www.youtube.com/embed/' + match[2] : null;
+        }
+
         function addGame() {
             const name = document.getElementById('gameName').value;
             const platform = document.getElementById('gamePlatform').value;
-            const imageInput = document.getElementById('gameImage');
+            const videoInput = document.getElementById('gameVideo').value;
+            const imageInput = document.getElementById('gameImage').files[0];
 
-            if (!name || imageInput.files.length === 0) {
-                alert('تکایە ناوی یاری و وێنەکەی هەڵبژێرە!');
+            if (!name || !videoInput) {
+                alert('تکایە ناو و لینکی ڤیدیۆ پڕ بکەرەوە!');
+                return;
+            }
+
+            const embedUrl = getYouTubeEmbedUrl(videoInput);
+            if (!embedUrl) {
+                alert('لینکی یوتیوب هەڵەیە، تکایە لینکی ڕاست دابنە!');
                 return;
             }
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const imageSrc = e.target.result;
-
-                // دروستکردنی لینکی گەڕانی یوتیوب بەپێی ناوی یارییەکە بۆ تریلەر بە شێوەی ئۆتۆماتیکی
-                const youtubeEmbedQuery = encodeURIComponent(name + " official trailer");
-                const trailerUrl = `https://www.youtube.com/embed?listType=search&list=${youtubeEmbedQuery}`;
-
-                const container = document.getElementById('gamesContainer');
+                const imageSrc = imageInput ? e.target.result : 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500';
                 
+                const container = document.getElementById('gamesContainer');
                 const card = document.createElement('div');
                 card.className = 'game-card';
                 card.innerHTML = `
                     <img src="${imageSrc}" alt="${name}">
-                    <div class="game-title">${name}</div>
-                    <div class="game-platform">پلاتفۆرم: ${platform}</div>
-                    <div class="trailer-box">
-                        <iframe src="${trailerUrl}" allowfullscreen></iframe>
-                    </div>
-                    <a href="https://wa.me/9647504400419?text=سڵاو، دەمەوێت ئەم یارییە داوا بکەم: ${name}" class="whatsapp-btn" target="_blank">داواکردن لە ڕێگەی واتسئاپ</a>
+                    <h3>${name}</h3>
+                    <p>پلاتفۆرم: ${platform}</p>
+                    <iframe src="${embedUrl}" allowfullscreen></iframe>
+                    <br>
+                    <a href="https://wa.me/?text=سڵاو، دەمەوێت یاری ${encodeURIComponent(name)} داوا بکەم" class="whatsapp-btn" target="_blank">داواکردن لە ڕێگەی واتسئاپ</a>
                 `;
-                
-                container.appendChild(card);
+                container.prepend(card);
 
-                // پاککردنەوەی خانەکان دوای زیادکردن
+                // پاککردنەوەی خانەکان
                 document.getElementById('gameName').value = '';
+                document.getElementById('gameVideo').value = '';
                 document.getElementById('gameImage').value = '';
+            };
+
+            if (imageInput) {
+                reader.readAsDataURL(imageInput);
+            } else {
+                reader.onload({ target: { result: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500' } });
             }
-            reader.readAsDataURL(imageInput.files[0]);
         }
     </script>
-
 </body>
 </html>
