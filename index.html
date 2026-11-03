@@ -6,11 +6,7 @@
     <title>کەتەلۆگی یارییەکانی PS4 و PS5</title>
     <style>
         body { font-family: Tahoma, sans-serif; background-color: #121212; color: #fff; margin: 0; padding: 20px; }
-        h1, h2 { text-align: center; color: #00d2ff; }
-        .admin-panel { background: #1e1e1e; padding: 20px; border-radius: 10px; max-width: 600px; margin: 0 auto 30px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .admin-panel input, .admin-panel select, .admin-panel button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #2a2a2a; color: #fff; box-sizing: border-box; }
-        .admin-panel button { background: #007bff; color: white; font-weight: bold; cursor: pointer; border: none; }
-        .admin-panel button:hover { background: #0056b3; }
+        h1 { text-align: center; color: #00d2ff; margin-bottom: 30px; }
         .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
         .game-card { background: #1e1e1e; border-radius: 10px; width: 300px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.5); text-align: center; padding-bottom: 15px; }
         .game-card img { width: 100%; height: 200px; object-fit: cover; }
@@ -19,81 +15,40 @@
         .game-card iframe { width: 100%; height: 170px; border: none; margin-top: 10px; }
         .order-btn { display: inline-block; background: #ff9800; color: white; padding: 10px 20px; margin-top: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; }
         .order-btn:hover { background: #e68900; }
+        .no-games { text-align: center; color: #777; margin-top: 50px; font-size: 18px; }
     </style>
 </head>
 <body>
 
-    <h1>کەتەلۆگی یارییەکانی ڤیدیۆیی</h1>
+    <h1>کەتەلۆگی یارییەکانی PS4 و PS5</h1>
 
-    <!-- بەشی زیادکردنی یاری (بۆ ئەوەی خۆت یاری تێدا زیاد بکەیت) -->
-    <div class="admin-panel">
-        <h2>زیادکردنی یاری نوێ</h2>
-        <input type="text" id="gameName" placeholder="ناوی یاری بنووسە (بۆ نموونە: God of War)">
-        <select id="gamePlatform">
-            <option value="PS4">پلاتفۆرم: PS4</option>
-            <option value="PS5">پلاتفۆرم: PS5</option>
-        </select>
-        <input type="text" id="gameVideo" placeholder="لینکی تریلەری یوتیوب (YouTube Link)">
-        <input type="file" id="gameImage" accept="image/*">
-        <button onclick="addGame()">زیادکردنی یاری بۆ سایت</button>
-    </div>
-
-    <!-- پێڕستی یارییەکان (کڕیارەکان لێرە سەیری کەتەلۆگەکە دەکەن) -->
+    <!-- پێڕستی یارییەکان کە کڕیارەکان دەبینن -->
     <div class="container" id="gamesContainer"></div>
 
     <script>
-        function getYouTubeEmbedUrl(url) {
-            let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            let match = url.match(regExp);
-            return (match && match[2].length === 11) ? 'https://www.youtube.com/embed/' + match[2] : null;
-        }
+        window.onload = function() {
+            const container = document.getElementById('gamesContainer');
+            let games = JSON.parse(localStorage.getItem('myGames')) || [];
 
-        function addGame() {
-            const name = document.getElementById('gameName').value;
-            const platform = document.getElementById('gamePlatform').value;
-            const videoInput = document.getElementById('gameVideo').value;
-            const imageInput = document.getElementById('gameImage').files[0];
-
-            if (!name || !videoInput) {
-                alert('تکایە ناو و لینکی ڤیدیۆ پڕ بکەرەوە!');
+            if (games.length === 0) {
+                container.innerHTML = '<div class="no-games">هیچ یارییەک لە کەتەلۆگدا نییە لە ئێستادا.</div>';
                 return;
             }
 
-            const embedUrl = getYouTubeEmbedUrl(videoInput);
-            if (!embedUrl) {
-                alert('لینکی یوتیوب هەڵەیە، تکایە لینکی ڕاست دابنە!');
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imageSrc = imageInput ? e.target.result : 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500';
-                
-                const container = document.getElementById('gamesContainer');
+            games.forEach(game => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
                 card.innerHTML = `
-                    <img src="${imageSrc}" alt="${name}">
-                    <h3>${name}</h3>
-                    <p>پلاتفۆرم: ${platform}</p>
-                    <iframe src="${embedUrl}" allowfullscreen></iframe>
+                    <img src="${game.image}" alt="${game.name}">
+                    <h3>${game.name}</h3>
+                    <p>پلاتفۆرم: ${game.platform}</p>
+                    <iframe src="${game.video}" allowfullscreen></iframe>
                     <br>
                     <a href="order.html" class="order-btn">داواکردن و کڕین</a>
                 `;
-                container.prepend(card);
-
-                document.getElementById('gameName').value = '';
-                document.getElementById('gameVideo5').value = '';
-                document.getElementById('gameVideo').value = '';
-                document.getElementById('gameImage').value = '';
-            };
-
-            if (imageInput) {
-                reader.readAsDataURL(imageInput);
-            } else {
-                reader.onload({ target: { result: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500' } });
-            }
-        }
+                container.appendChild(card);
+            });
+        };
     </script>
 </body>
 </html>
